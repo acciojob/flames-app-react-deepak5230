@@ -1,93 +1,65 @@
-import React, { Component, useState } from "react";
-import "../styles/App.css";
-
-const messageArr = [
-    "Siblings",
-    "Friends",
-    "Love",
-    "Affection",
-    "Marriage",
-    "Enemy",
-  ];
-
-  const removeMatchedChar = (str1, str2) => {
-    let newStr1 = str1;
-    let newStr2 = str2;
-  
-    const maxLength = Math.min(str1.length, str2.length);
-  
-    for (let i = 0; i < maxLength; i++) {
-      const ch1 = str1[i];
-      const ch2 = str2[i];
-      if (newStr1.includes(ch1) && newStr2.includes(ch1)) {
-        newStr1 = newStr1.replace(ch1, "");
-        newStr2 = newStr2.replace(ch1, "");
-      }
-    }
-  
-    return [newStr1, newStr2];
-  };
+import React, { useState } from 'react';
+import './App.css';
 
 function App() {
-    const [input1, setInput1] = useState("");
-    const [input2, setInput2] = useState("");
-    const [message, setMessage] = useState("");
+  const [name1, setName1] = useState('');
+  const [name2, setName2] = useState('');
+  const [result, setResult] = useState('');
 
-    function firstName(e){
-        console.log(e.target.value)
-        setInput1(e.target.value);
+  const calculateRelationship = () => {
+    if (name1.trim() === '' || name2.trim() === '') {
+      setResult('Please Enter valid input');
+      return;
     }
-    function SecondName  (e){
-        console.log(e.target.value)
-        setInput2(e.target.value)
+
+    let tempName1 = name1;
+    let tempName2 = name2;
+
+    // Remove common characters
+    for (let char of name1) {
+      if (tempName2.includes(char)) {
+        tempName1 = tempName1.replace(char, '');
+        tempName2 = tempName2.replace(char, '');
       }
-    const handleCalculate=()=>{
-        console.log("click calculate")
-        if(input1 ==="" || input2==="" )
-        {
-            return setMessage("Please Enter valid input");
-        }
-        let [str1, str2] = removeMatchedChar(input1, input2);
+    }
 
-        const msgNumber = (str1.length + str2.length) % 6;
-        setMessage(messageArr[msgNumber]); // getting msg based on number
+    const count = (tempName1 + tempName2).length;
+    const remainder = count % 6;
 
+    const flames = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
+    setResult(flames[remainder]);
+  };
 
-    };
-    const handleClear=()=>{
-        console.log("clicked clear")
-        setInput1("");
-        setInput2("");
-        setMessage("");
-    };
+  const clearInputs = () => {
+    setName1('');
+    setName2('');
+    setResult('');
+  };
 
   return (
-    <div id="main">
+    <div className="App">
+      <h1>FLAMES Game</h1>
       <input
-        name="name1"
-        value={input1}
+        type="text"
+        value={name1}
+        onChange={(e) => setName1(e.target.value)}
         data-testid="input1"
-        type="text"
-        onChange={(e) => {
-          firstName(e);
-        }}
+        placeholder="Enter first name"
       />
       <input
-        name="name2"
-        value={input2}
-        data-testid="input2"
         type="text"
-        onChange={(e) => {
-          SecondName(e);
-        }}
+        value={name2}
+        onChange={(e) => setName2(e.target.value)}
+        data-testid="input2"
+        placeholder="Enter second name"
       />
-      <button data-testid="calculate_relationship" onClick={handleCalculate}>
-        Calculate Relationship Future
+      <button onClick={calculateRelationship} data-testid="calculate_relationship">
+        Calculate Relationship
       </button>
-      <button data-testid="clear" onClick={handleClear}>
+      <button onClick={clearInputs} data-testid="clear">
         Clear
       </button>
-      <h3 data-testid="answer">{message}</h3>
+      <h3 data-testid="answer">{result}</h3>
     </div>
   );
 }
