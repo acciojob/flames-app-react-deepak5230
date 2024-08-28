@@ -1,16 +1,17 @@
+
 import React, { Component, useState } from "react";
 import "../styles/App.css";
 
 const messageArr = [
-    "Siblings",
-    "Friends",
-    "Love",
-    "Affection",
-    "Marriage",
-    "Enemy",
-  ];
+  "Siblings",
+  "Friends",
+  "Love",
+  "Affection",
+  "Marriage",
+  "Enemy",
+];
 
-  const removeMatchedChar = (str1, str2) => {
+const removeMatchedChar = (str1, str2) => {
     let newStr1 = str1;
     let newStr2 = str2;
   
@@ -30,57 +31,41 @@ const messageArr = [
 
 function App() {
     const [input1, setInput1] = useState("");
-    const [input2, setInput2] = useState("");
-    const [message, setMessage] = useState("");
-
-    function firstName(e){
-        console.log(e.target.value)
-        setInput1(e.target.value);
-    }
-    function SecondName  (e){
-        console.log(e.target.value)
-        setInput2(e.target.value)
-      }
-    const handleCalculate=()=>{
-        console.log("click calculate")
-        if(input1 ==="" || input2==="" )
-        {
-            return setMessage("Please Enter valid input");
-        }
-        let [str1, str2] = removeMatchedChar(input1, input2);
-
-        const msgNumber = (str1.length + str2.length) % 6;
-        setMessage(messageArr[msgNumber]); // getting msg based on number
+  const [input2, setInput2] = useState("");
+  const [message, setMessage] = useState("");
 
 
-    };
-    const handleClear=()=>{
-        console.log("clicked clear")
-        setInput1("");
-        setInput2("");
-        setMessage("");
-    };
+  function firstName  (e){
+    setInput1(e.target.value)
+
+    
+  }
+
+  function SecondName  (e){
+    setInput2(e.target.value)
+  }
+
+
+  const handleCalculate = () => {
+    
+    if (input1 === "" || input2 === "")
+      return setMessage("Please Enter valid input");
+    let [str1, str2] = removeMatchedChar(input1, input2);
+   
+    const msgNumber = (str1.length + str2.length) % 6;
+    setMessage(messageArr[msgNumber]); // getting msg based on number
+  };
+
+  const handleClear = () => {
+    setMessage("");
+    setInput1 (" ");
+    setInput2 (" ");
+  };
 
   return (
     <div id="main">
-      <input
-        name="name1"
-        value={input1}
-        data-testid="input1"
-        type="text"
-        onChange={(e) => {
-          firstName(e);
-        }}
-      />
-      <input
-        name="name2"
-        value={input2}
-        data-testid="input2"
-        type="text"
-        onChange={(e) => {
-          SecondName(e);
-        }}
-      />
+      <input name="name1" data-testid="input1"  type="text" onChange={(e)=>{firstName(e)}}/>
+      <input name="name2" data-testid="input2" type="text" onChange={(e)=>{SecondName(e)}} />
       <button data-testid="calculate_relationship" onClick={handleCalculate}>
         Calculate Relationship Future
       </button>
